@@ -39,7 +39,7 @@ public class ExamController {
     @Autowired
     ExamUtils examUtils;
 
-    @GetMapping("/paper")
+    @PostMapping("/paper")
     public JsonResponse getPaper(@RequestBody PaperInfo paperInfo) {
         QueryWrapper<ChoiceQuestion> choiceQuestionQueryWrapper = new QueryWrapper<>();
         QueryWrapper<EssayQuestion> essayQuestionQueryWrapper = new QueryWrapper<>();
@@ -71,7 +71,7 @@ public class ExamController {
         }
     }
 
-    @PostMapping("/paper")
+    @PostMapping("/paper/submit")
     public JsonResponse submitPaper(@RequestBody Paper paper) {
         try {
             paperService.savePaper(paper);
