@@ -23,7 +23,7 @@ import java.util.Map;
  * @author Liangzhaohao
  * @version 1.0.0
  * @className QuestionController
- * @description 问题Controller
+ * @description ExamController
  * @createTime 2021/10/26 10:40
  */
 @RestController
