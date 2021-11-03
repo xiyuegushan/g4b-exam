@@ -2,7 +2,6 @@ package com.g4b.g4bexam.utils;
 
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -16,14 +15,6 @@ import java.util.Random;
  */
 @Component
 public class ExamUtils<T> {
-
-    private static ExamUtils examUtils;
-
-    @PostConstruct
-    public void init() {
-        examUtils = this;
-    }
-
     public List<T> getRandomList(List<T> paramList, int count) {
         if (paramList.size() < count) {
             return paramList;

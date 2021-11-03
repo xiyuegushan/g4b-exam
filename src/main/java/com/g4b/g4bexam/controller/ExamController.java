@@ -43,7 +43,10 @@ public class ExamController {
     MongoTemplate mongoTemplate;
 
     @Autowired
-    ExamUtils examUtils;
+    ExamUtils<ChoiceQuestion> choiceQuestionExamUtils;
+
+    @Autowired
+    ExamUtils<EssayQuestion> essayQuestionExamUtils;
 
     @PostMapping("/paper")
     public JsonResponse getPaper(@RequestBody PaperInfo paperInfo) {
@@ -59,8 +62,8 @@ public class ExamController {
             List<EssayQuestion> essayQuestionList = questionService.getEssayQuestion(essayQuestionQueryWrapper);
 
             //调用封装的方法,从选择题\问答题List中取出指定个数的题目并分别存入两个新的List
-            List<ChoiceQuestion> randomChoiceQuestionList = examUtils.getRandomList(choiceQuestionList, 10);
-            List<EssayQuestion> randomEssayQuestionList = examUtils.getRandomList(essayQuestionList, 5);
+            List<ChoiceQuestion> randomChoiceQuestionList = choiceQuestionExamUtils.getRandomList(choiceQuestionList, 10);
+            List<EssayQuestion> randomEssayQuestionList = essayQuestionExamUtils.getRandomList(essayQuestionList, 5);
 
             //初始化Paper,并set入对应的姓名,手机,岗位以及对应的选择题问答题List
             Paper paper = new Paper();
@@ -95,7 +98,7 @@ public class ExamController {
             Paper paper = paperService.selectPaper(id);
             //尝试使用MongoDB取出对象
             Query query = new Query(Criteria.where("id").is(id));
-            Paper mongoPaper = mongoTemplate.findOne(query,Paper.class,"Paper");
+            Paper mongoPaper = mongoTemplate.findOne(query, Paper.class, "Paper");
             System.out.println(mongoPaper);
             return JsonResponse.success("获取对应试卷成功", paper);
         } catch (Exception e) {
@@ -117,8 +120,8 @@ public class ExamController {
     public JsonResponse selectPage(@PathVariable("pageNum") int pageNum, @PathVariable("pageSize") int pageSize) {
         Page<Paper> page = new Page<>(pageNum, pageSize);
         try {
-            IPage<Paper> paperIPage = paperService.selectPage(page, null);
-            return JsonResponse.success("获取已提交试卷分页信息成功", paperIPage);
+            IPage<Paper> paperPage = paperService.selectPage(page, null);
+            return JsonResponse.success("获取已提交试卷分页信息成功", paperPage);
         } catch (Exception e) {
             return JsonResponse.fail("获取已提交试卷分页信息失败,失败原因:" + e.getMessage());
         }
