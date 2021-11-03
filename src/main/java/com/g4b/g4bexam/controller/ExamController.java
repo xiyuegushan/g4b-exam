@@ -13,6 +13,9 @@ import com.g4b.g4bexam.service.QuestionService;
 import com.g4b.g4bexam.utils.ExamUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -35,6 +38,9 @@ public class ExamController {
 
     @Autowired
     PaperService paperService;
+
+    @Autowired
+    MongoTemplate mongoTemplate;
 
     @Autowired
     ExamUtils examUtils;
@@ -75,6 +81,8 @@ public class ExamController {
     public JsonResponse submitPaper(@RequestBody Paper paper) {
         try {
             paperService.savePaper(paper);
+            //尝试使用MongoDB存储对象
+            mongoTemplate.insert(paper);
             return JsonResponse.success("提交成功", null);
         } catch (Exception e) {
             return JsonResponse.fail("提交失败,失败原因:" + e.getMessage());
@@ -85,6 +93,10 @@ public class ExamController {
     public JsonResponse selectPaper(@PathVariable int id) {
         try {
             Paper paper = paperService.selectPaper(id);
+            //尝试使用MongoDB取出对象
+            Query query = new Query(Criteria.where("id").is(id));
+            Paper mongoPaper = mongoTemplate.findOne(query,Paper.class,"Paper");
+            System.out.println(mongoPaper);
             return JsonResponse.success("获取对应试卷成功", paper);
         } catch (Exception e) {
             return JsonResponse.fail("获取对应试卷失败,失败原因:" + e.getMessage());

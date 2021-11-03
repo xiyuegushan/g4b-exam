@@ -29,3 +29,10 @@ spring:
       maxPoolPreparedStatementPerConnectionSize: 20
       useGlobalDataSourceStat: true
       connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+  data:
+    mongodb:
+      password: '123456'
+      username: lzh
+      host: 120.24.234.243
+      port: 27017
+      database: g4b

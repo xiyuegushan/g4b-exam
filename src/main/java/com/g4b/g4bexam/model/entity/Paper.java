@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.handlers.FastjsonTypeHandler;
 import lombok.Data;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 import java.util.Map;
@@ -19,8 +21,10 @@ import java.util.Map;
  */
 @Data
 @TableName(value = "paper", autoResultMap = true)
+@Document("Paper")
 public class Paper {
     @TableId(value = "ID", type = IdType.AUTO)
+    @Id
     private Integer id;
     @TableField(value = "name")
     private String name;
